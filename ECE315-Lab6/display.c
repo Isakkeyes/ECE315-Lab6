@@ -215,13 +215,13 @@ void display_digit(uint8_t location, uint8_t number)
             DIG_0_PORT->OUT &= ~DIG_0_PIN;
             break;
         case 1:
-            DIG_1_PORT->OUT |= DIG_1_PIN;
+            DIG_1_PORT->OUT &= ~DIG_1_PIN;
             break;
         case 2:
-            DIG_2_PORT->OUT |= DIG_2_PIN;
+            DIG_2_PORT->OUT &= ~DIG_2_PIN;
             break;
         case 3:
-            DIG_3_PORT->OUT |= DIG_3_PIN;
+            DIG_3_PORT->OUT &= ~DIG_3_PIN;
             break;
     }
 

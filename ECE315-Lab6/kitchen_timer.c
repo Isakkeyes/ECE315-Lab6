@@ -116,4 +116,40 @@ void kitchen_timer_mode_count_down(void)
 
 }
 
+/*****************************************************
+ * Prints 4-digit number to display
+ *****************************************************/
+void display_4_digit(uint8_t num0, uint8_t num1, uint8_t num2, uint8_t num3) {
+
+    uint8_t displayDig = 0x00;
+
+    while (1) {
+        // every 2ms change the digit that is on and set next to respective number
+        if (ALERT_2_MILLISECOND) {
+            display_all_dig_off();
+            switch (displayDig) {
+                case 0:
+                    display_digit(0, num0);
+                    displayDig = 0x01;
+                    break;
+                case 1:
+                    display_digit(1, num1);
+                    displayDig = 0x02;
+                    break;
+                case 2:
+                    display_digit(2, num2);
+                    displayDig = 0x03;
+                    break;
+                case 3:
+                    display_digit(3, num3);
+                    displayDig = 0x00;
+                    break;
+            }
+            ALERT_2_MILLISECOND = false;
+            //ALERT_1_SECOND = false;
+
+        }
+    }
+
+}
 
