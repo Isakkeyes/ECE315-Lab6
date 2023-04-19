@@ -1,0 +1,11 @@
+"./cap_sense.obj"
+"./display.obj"
+"./kitchen_timer.obj"
+"./main.obj"
+"./startup_msp432p401r_ccs.obj"
+"./system_msp432p401r.obj"
+"./provided_code/buzzer.obj"
+"./provided_code/hw_timers.obj"
+"./provided_code/i2c.obj"
+"../msp432p401r.cmd"
+-llibc.a
