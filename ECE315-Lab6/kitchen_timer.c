@@ -105,23 +105,36 @@ void kitchen_timer_mode_count_down(void)
             kitchen_timer_mode_init();
         }
         if (time_sec == 0) {
-
+            // activate buzzer and eye flashing
         }
         if (ALERT_1_SECOND) {
-            display_4_digit(trunc(current_hour/10), trunc(time_sec/3600), trunc(current_hour/10), current_min%10);
+            display_4_digit(trunc(current_hour/10), trunc(time_sec/3600), trunc(current_hour/10), trunc(time_sec/60));
             time_sec--;
         }
+        ALERT_1_SECOND = false;
     }
 
 
 }
 
 /*****************************************************
- * Prints 4-digit number to display
+ * Prints 4-digit number of time in seconds to display
  *****************************************************/
-void display_4_digit(uint8_t num0, uint8_t num1, uint8_t num2, uint8_t num3) {
+void display_4_digit(uint8_t time_min) {
 
     uint8_t displayDig = 0x00;
+
+    uint8_t time_hour = trunc(time_min / 60);
+    uint8_t time_hour_0 = time_hour % 10;
+    uint8_t time_hour_1 = trunc(time_hour / 10);
+
+    uint8_t time_min_0 = 0;
+    uint8_t time_min_1 = 0;
+
+    if ((time_min % 60) != 0) {
+        time_min_0 = time_min % 10;
+        time_min_1 = trunc(time_min / 10);
+    }
 
     while (1) {
         // every 2ms change the digit that is on and set next to respective number
