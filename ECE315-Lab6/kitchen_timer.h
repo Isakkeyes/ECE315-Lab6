@@ -17,6 +17,7 @@
 #include "provided_code/hw_timers.h"
 #include "provided_code/buzzer.h"
 #include "provided_code/hw_timers.h"
+#include "math.h"
 
 void kitchen_timer_mode_count_down(void);
 void kitchen_timer_mode_init(void);

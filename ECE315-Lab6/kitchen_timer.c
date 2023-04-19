@@ -67,13 +67,15 @@ void kitchen_timer_mode_init(void)
             hours_sel = false;
         } else if (((capStatus & 0x08) == 0x08) && hours_sel) {
             current_hour++;
-        } else if (((capStatus & 0x08) == 0x08) !hours_sel) {
+        } else if (((capStatus & 0x08) == 0x08) && !hours_sel) {
             current_min++;
         } else if (((capStatus & 0x04) == 0x04) && hours_sel) {
             current_hour--;
         } else if (((capStatus & 0x04) == 0x04) && !hours_sel) {
             current_min--;
         }
+
+        display_4_digit(trunc(current_hour/10), current_hour%10, trunc(current_hour/10), current_min%10);
 
         // start the count
         if ((capStatus & 0x03) == 0x03) {
@@ -88,7 +90,7 @@ void kitchen_timer_mode_init(void)
 void kitchen_timer_mode_count_down(void)
 {
     uint8_t time_sec = current_hour * 3600 + current_min * 60;
-    
+
 
     // ADD CODE
     // count down to zero
@@ -99,10 +101,14 @@ void kitchen_timer_mode_count_down(void)
     hw_timer_init_1S_irq();
 
     while (1) {
+        if ((capStatus & 0x03) == 0x03) {
+            kitchen_timer_mode_init();
+        }
         if (time_sec == 0) {
 
         }
         if (ALERT_1_SECOND) {
+            display_4_digit(trunc(current_hour/10), trunc(time_sec/3600), trunc(current_hour/10), current_min%10);
             time_sec--;
         }
     }
