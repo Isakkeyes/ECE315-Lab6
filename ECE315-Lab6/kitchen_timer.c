@@ -40,6 +40,10 @@
  * 8. Complete remaining requirements.
  *****************************************************************************/
 
+extern uint8_t current_min = 0;
+extern uint8_t current_hour = 0;
+
+
 /*****************************************************
  * Allows the user to set the duration of the timer
  *****************************************************/
@@ -52,8 +56,24 @@ void kitchen_timer_mode_init(void)
     // v (key 2) - decrement by 1 (loop 0 -> 59/99)
     // if H+M start countdown
 
+    bool hours_sel = true;
+
     while (1) {
         uint8_t capStatus = AT42QT2120_read_key_status_lo();
+
+        if ((capStatus & 0x02) == 0x02) {
+            hours_sel = true;
+        } else if ((capStatus & 0x01) == 0x01) {
+            hours_sel = false;
+        } else if (((capStatus & 0x08) == 0x08) && hours_sel) {
+            current_hour++;
+        } else if (((capStatus & 0x08) == 0x08) !hours_sel) {
+            current_min++;
+        } else if (((capStatus & 0x04) == 0x04) && hours_sel) {
+            current_hour--;
+        } else if (((capStatus & 0x04) == 0x04) && !hours_sel) {
+            current_min--;
+        }
 
         // start the count
         if ((capStatus & 0x03) == 0x03) {
@@ -67,10 +87,26 @@ void kitchen_timer_mode_init(void)
  *****************************************************/
 void kitchen_timer_mode_count_down(void)
 {
+    uint8_t time_sec = current_hour * 3600 + current_min * 60;
+    
+
     // ADD CODE
     // count down to zero
     // at 00:00 toggle eyes and buzzer every 1s
     // if H+M put back into initialization mode
+
+    // Start 1sec interrupt timer
+    hw_timer_init_1S_irq();
+
+    while (1) {
+        if (time_sec == 0) {
+
+        }
+        if (ALERT_1_SECOND) {
+            time_sec--;
+        }
+    }
+
 
 }
 
