@@ -11,7 +11,7 @@
  */
 void main(void)
 {
-    uint8_t buttons;
+    //uint8_t buttons;
 	WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;		// stop watchdog timer
 
 	display_init();
@@ -21,7 +21,7 @@ void main(void)
 
 	i2c_init();
 	cap_sense_interrupt_init();
-	buttons = cap_sense_get_buttons();
+	// buttons = cap_sense_get_buttons();
 
 	hw_timer_init_1S_irq();
 	hw_timer_init_2ms_irq();
@@ -31,12 +31,10 @@ void main(void)
 
     __enable_irq();
 
-    display_digit(0, 0);
-    /**
-    while(1){
-        kitchen_timer_mode_init();
-        kitchen_timer_mode_count_down();
-    };
-    **/
+    //display_digit(1, 9);
+
+    //display_4_digit(00, 21);
+
+    kitchen_timer_mode_init();
 
 }

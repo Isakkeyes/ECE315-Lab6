@@ -62,7 +62,7 @@ uint8_t AT42QT2120_read_reg(uint8_t reg)
 uint8_t AT42QT2120_read_key_status_lo(void)
 {
     // ADD CODE.
-    return AT42QT2120_read_reg(3);
+    return AT42QT2120_read_reg(0x03);
 }
 
 /** Read Chip Status Hi Register
@@ -73,7 +73,7 @@ uint8_t AT42QT2120_read_key_status_lo(void)
 uint8_t AT42QT2120_read_key_status_hi(void)
 {
     // ADD CODE.
-    return AT42QT2120_read_reg(4);
+    return AT42QT2120_read_reg(0x04);
 }
 
 /**
@@ -84,7 +84,7 @@ uint8_t AT42QT2120_read_key_status_hi(void)
 uint8_t AT42QT2120_read_detection_status(void)
 {
     // ADD CODE.
-    return AT42QT2120_read_reg(2);
+    return AT42QT2120_read_reg(0x02);
 }
 
 /**
@@ -95,7 +95,7 @@ uint8_t AT42QT2120_read_detection_status(void)
 uint8_t AT42QT2120_read_slider_status(void)
 {
     // ADD CODE.
-    return AT42QT2120_read_reg(5);
+    return AT42QT2120_read_reg(0x05);
 }
 
 

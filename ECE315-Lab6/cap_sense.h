@@ -35,4 +35,8 @@ void cap_sense_interrupt_init(void);
  *****************************************************************************/
 uint8_t cap_sense_get_buttons(void);
 
+/** Read Chip Status Low Register
+ */
+uint8_t AT42QT2120_read_key_status_lo(void);
+
 #endif /* CAP_SENSE_H_ */

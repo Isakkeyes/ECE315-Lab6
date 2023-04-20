@@ -144,10 +144,18 @@ void display_digit(uint8_t location, uint8_t number)
             SEG_D_PORT->OUT |= SEG_D_PIN;
             SEG_E_PORT->OUT |= SEG_E_PIN;
             SEG_F_PORT->OUT |= SEG_F_PIN;
+
+            SEG_G_PORT->OUT &= ~SEG_G_PIN;
             break;
         case 1:
             SEG_B_PORT->OUT |= SEG_B_PIN;
             SEG_C_PORT->OUT |= SEG_C_PIN;
+
+            SEG_A_PORT->OUT &= ~SEG_A_PIN;
+            SEG_D_PORT->OUT &= ~SEG_D_PIN;
+            SEG_E_PORT->OUT &= ~SEG_E_PIN;
+            SEG_F_PORT->OUT &= ~SEG_F_PIN;
+            SEG_G_PORT->OUT &= ~SEG_G_PIN;
             break;
         case 2:
             SEG_A_PORT->OUT |= SEG_A_PIN;
@@ -155,6 +163,9 @@ void display_digit(uint8_t location, uint8_t number)
             SEG_D_PORT->OUT |= SEG_D_PIN;
             SEG_E_PORT->OUT |= SEG_E_PIN;
             SEG_G_PORT->OUT |= SEG_G_PIN;
+
+            SEG_F_PORT->OUT &= ~SEG_F_PIN;
+            SEG_C_PORT->OUT &= ~SEG_C_PIN;
             break;
         case 3:
             SEG_A_PORT->OUT |= SEG_A_PIN;
@@ -162,12 +173,19 @@ void display_digit(uint8_t location, uint8_t number)
             SEG_C_PORT->OUT |= SEG_C_PIN;
             SEG_D_PORT->OUT |= SEG_D_PIN;
             SEG_G_PORT->OUT |= SEG_G_PIN;
+
+            SEG_E_PORT->OUT &= ~SEG_E_PIN;
+            SEG_F_PORT->OUT &= ~SEG_F_PIN;
             break;
         case 4:
             SEG_A_PORT->OUT |= SEG_A_PIN;
             SEG_B_PORT->OUT |= SEG_B_PIN;
             SEG_F_PORT->OUT |= SEG_F_PIN;
             SEG_G_PORT->OUT |= SEG_G_PIN;
+
+            SEG_C_PORT->OUT &= ~SEG_C_PIN;
+            SEG_E_PORT->OUT &= ~SEG_E_PIN;
+            SEG_D_PORT->OUT &= ~SEG_D_PIN;
             break;
         case 5:
             SEG_A_PORT->OUT |= SEG_A_PIN;
@@ -175,6 +193,9 @@ void display_digit(uint8_t location, uint8_t number)
             SEG_D_PORT->OUT |= SEG_D_PIN;
             SEG_F_PORT->OUT |= SEG_F_PIN;
             SEG_G_PORT->OUT |= SEG_G_PIN;
+
+            SEG_E_PORT->OUT &= ~SEG_E_PIN;
+            SEG_B_PORT->OUT &= ~SEG_B_PIN;
             break;
         case 6:
             SEG_A_PORT->OUT |= SEG_A_PIN;
@@ -183,11 +204,18 @@ void display_digit(uint8_t location, uint8_t number)
             SEG_E_PORT->OUT |= SEG_E_PIN;
             SEG_F_PORT->OUT |= SEG_F_PIN;
             SEG_G_PORT->OUT |= SEG_G_PIN;
+
+            SEG_B_PORT->OUT &= ~SEG_B_PIN;
             break;
         case 7:
             SEG_A_PORT->OUT |= SEG_A_PIN;
             SEG_B_PORT->OUT |= SEG_B_PIN;
             SEG_C_PORT->OUT |= SEG_C_PIN;
+
+            SEG_E_PORT->OUT &= ~SEG_E_PIN;
+            SEG_D_PORT->OUT &= ~SEG_D_PIN;
+            SEG_F_PORT->OUT &= ~SEG_F_PIN;
+            SEG_G_PORT->OUT &= ~SEG_G_PIN;
             break;
         case 8:
             SEG_A_PORT->OUT |= SEG_A_PIN;
@@ -205,6 +233,8 @@ void display_digit(uint8_t location, uint8_t number)
             SEG_D_PORT->OUT |= SEG_D_PIN;
             SEG_F_PORT->OUT |= SEG_F_PIN;
             SEG_G_PORT->OUT |= SEG_G_PIN;
+
+            SEG_E_PORT->OUT &= ~SEG_E_PIN;
             break;
 
     }
@@ -213,15 +243,27 @@ void display_digit(uint8_t location, uint8_t number)
     switch (location) {
         case 0:
             DIG_0_PORT->OUT &= ~DIG_0_PIN;
+            DIG_1_PORT->OUT |= DIG_1_PIN;
+            DIG_2_PORT->OUT |= DIG_2_PIN;
+            DIG_3_PORT->OUT |= DIG_3_PIN;
             break;
         case 1:
             DIG_1_PORT->OUT &= ~DIG_1_PIN;
+            DIG_0_PORT->OUT |= DIG_0_PIN;
+            DIG_2_PORT->OUT |= DIG_2_PIN;
+            DIG_3_PORT->OUT |= DIG_3_PIN;
             break;
         case 2:
             DIG_2_PORT->OUT &= ~DIG_2_PIN;
+            DIG_1_PORT->OUT |= DIG_1_PIN;
+            DIG_0_PORT->OUT |= DIG_0_PIN;
+            DIG_3_PORT->OUT |= DIG_3_PIN;
             break;
         case 3:
             DIG_3_PORT->OUT &= ~DIG_3_PIN;
+            DIG_0_PORT->OUT |= DIG_0_PIN;
+            DIG_1_PORT->OUT |= DIG_1_PIN;
+            DIG_2_PORT->OUT |= DIG_2_PIN;
             break;
     }
 
