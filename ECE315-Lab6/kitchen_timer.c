@@ -1,7 +1,7 @@
 /*
  * kitchen_timer.c
  *
- *  Created on: Jun 18, 2021
+ *  Created on: April 19, 2023
  *      Author: <Your Name>
  */
 
@@ -62,9 +62,7 @@ void kitchen_timer_mode_init(void)
 
     while (1) {
 
-
         capStatus = cap_sense_get_buttons();
-
 
         if ((capStatus & 0x02) == 0x02) {
             hours_sel = true;
@@ -72,6 +70,7 @@ void kitchen_timer_mode_init(void)
             hours_sel = false;
         }
 
+        // increment/decrement minutes/hours accordingly
         if (((capStatus & 0x08) == 0x08) && hours_sel) {
             if (set_time_hour == 99) {
                 set_time_hour = 0;
@@ -79,7 +78,7 @@ void kitchen_timer_mode_init(void)
                 set_time_hour++;
             }
         } else if (((capStatus & 0x08) == 0x08) && !hours_sel) {
-            if (set_time_min == 99) {
+            if (set_time_min == 59) {
                 set_time_min = 0;
             } else {
                 set_time_min++;
@@ -92,12 +91,13 @@ void kitchen_timer_mode_init(void)
             }
         } else if (((capStatus & 0x04) == 0x04) && !hours_sel) {
             if (set_time_min == 0) {
-                set_time_min = 99;
+                set_time_min = 59;
             } else {
                 set_time_min--;
             }
         }
 
+        // update the display if any buttons were pressed
         if (ALERT_BUTTON_PRESSED) {
             display_4_digit(set_time_hour, set_time_min);
             ALERT_BUTTON_PRESSED = false;
@@ -164,7 +164,10 @@ void display_4_digit(uint8_t time_hour, uint8_t time_min) {
     while (1) {
         // every 2ms change the digit that is on and set next to respective number
         if (ALERT_2_MILLISECOND) {
-            display_all_dig_off();
+
+            // I believe it isn't be necessary to turn all off now that the other
+            // digits are turned off in display_digit
+            //display_all_dig_off();
             switch (displayDig) {
                 case 0:
                     display_digit(0, time_min_0);
@@ -184,14 +187,60 @@ void display_4_digit(uint8_t time_hour, uint8_t time_min) {
                     break;
             }
             ALERT_2_MILLISECOND = false;
-            //ALERT_1_SECOND = false;
+
+            // when a button is pressed go back to initialization
+            // TODO: may need to add a way to go back to countdown instead of init
             if (ALERT_BUTTON_PRESSED) {
-                kitchen_timer_mode_init();
                 ALERT_BUTTON_PRESSED = false;
+                break;
             }
 
         }
     }
 
+    // go to initialization
+    // TODO: may need to add a way to go back to countdown instead of init
+    kitchen_timer_mode_init();
+
+}
+
+/*****************************************************
+ * Toggles the eyes and the buzzer every one second
+ *****************************************************/
+void toggle_eyes_buzzer(void) {
+    
+    bool eye_state = false;
+    bool buzzer_state = false;
+
+    while (1) {
+        
+        // check if H+M is pressed and go to initialization if so
+        capStatus = AT42QT2120_read_key_status_lo();
+        if ((capStatus & 0x03) == 0x03) {
+            display_eye_left(false);
+            display_eye_right(false);
+            buzzer_off();
+            break;
+        }
+
+        // when 1 second is reached, toggle eyes & buzzer
+        if (ALERT_1_SECOND) {
+            display_eye_left(eye_state);
+            display_eye_right(eye_state);
+            if (buzzer_state) {
+                buzzer_on();
+            } else {
+                buzzer_off();
+            }
+
+            eye_state = !eye_state;
+            buzzer_state = !buzzer_state;
+            
+            ALERT_1_SECOND = false;
+        }
+    }
+
+    // go to initialization
+    kitchen_timer_mode_init();
 }
 
