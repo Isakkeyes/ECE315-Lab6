@@ -1,8 +1,9 @@
 /*
  * display.c
  *
- *  Created on: Jun 22, 2021
- *      Author: <Your Name>
+ *  Created on: April 19, 2023
+ *      Authors: Isak Keyes
+ *
  */
 
 #include "display.h"

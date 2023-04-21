@@ -1,8 +1,9 @@
 /*
  * opt3001.c
  *
- *  Created on: Jun 18, 2021
- *      Author: <Your Name>
+ *  Created on: April 19, 2023
+ *      Authors: Isak Keyes
+ *
  */
 
 #include <cap_sense.h>

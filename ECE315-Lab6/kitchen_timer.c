@@ -2,7 +2,8 @@
  * kitchen_timer.c
  *
  *  Created on: April 19, 2023
- *      Author: <Your Name>
+ *      Authors: Isak Keyes
+ *
  */
 
 #include "kitchen_timer.h"
