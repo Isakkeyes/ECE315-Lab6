@@ -3,7 +3,7 @@
  *
  *  Created on: April 19, 2023
  *      Authors: Isak Keyes
- *
+ *               Ian Lotus
  */
 
 #include "kitchen_timer.h"
@@ -51,8 +51,6 @@ extern uint8_t displayDig = 0x00;
  *****************************************************/
 void kitchen_timer_mode_init(void)
 {
-    printf("In init \x0A");
-    // ADD CODE
     // H (key 1) - modify hours (0-99)
     // M (key 0) - modify minutes (0-59)
     // ^ (key 3) - increment by 1 (loop 59/99 -> 0)
@@ -65,10 +63,8 @@ void kitchen_timer_mode_init(void)
 
     while (1) {
 
-        //if (ALERT_BUTTON_PRESSED) {
         capStatus = cap_sense_get_buttons();
-        //    ALERT_BUTTON_PRESSED = false;
-        //}
+
         if ((capStatus & 0x02) == 0x02) {
             hours_sel = true;
         } else if ((capStatus & 0x01) == 0x01) {
@@ -135,11 +131,9 @@ void kitchen_timer_mode_count_down(void)
 
     uint8_t capStatus = 0;
 
-    // ADD CODE
     // count down to zero
     // at 00:00 toggle eyes and buzzer every 1s
     // if H+M put back into initialization mode
-
     while (1) {
         capStatus = cap_sense_get_buttons();
 
@@ -197,10 +191,6 @@ void display_4_digit(uint8_t time_hour, uint8_t time_min, bool done) {
 
     uint8_t capStatus = 0;
 
-
-    // I believe it isn't be necessary to turn all off now that the other
-    // digits are turned off in display_digit
-    //display_all_dig_off();
     switch (displayDig) {
         case 0:
             display_digit(0, time_min_0);
@@ -219,18 +209,6 @@ void display_4_digit(uint8_t time_hour, uint8_t time_min, bool done) {
             displayDig = 0x00;
             break;
     }
-
-    // when a button is pressed go back to initialization
-    // TODO: may need to add a way to go back to countdown instead of init
-    //if (ALERT_BUTTON_PRESSED) {
-    //    capStatus = AT42QT2120_read_key_status_lo();
-    //    ALERT_BUTTON_PRESSED = false;
-    //    break;
-    //}
-
-    // go to initialization
-    // TODO: may need to add a way to go back to countdown instead of init
-    // kitchen_timer_mode_init();
 
 }
 

@@ -3,29 +3,29 @@
  *
  *  Created on: April 19, 2023
  *      Authors: Isak Keyes
- *
+ *               Ian Lotus
  */
 
 #include "display.h"
 
 uint8_t SEVEN_SEG_LUT[] =
 {
-   0xFC,  // 0   -- ADD VALUE - 11111100
-   0x60,  // 1   -- ADD VALUE - 01100000
-   0xDA,  // 2   -- ADD VALUE - 11011010
-   0xF2,  // 3   -- ADD VALUE - 11110010
-   0x66,  // 4   -- ADD VALUE - 01100110
-   0xB6,  // 5   -- ADD VALUE - 10110110
-   0xBE,  // 6   -- ADD VALUE - 10111110
-   0xE0,  // 7   -- ADD VALUE - 11100000
-   0xFE,  // 8   -- ADD VALUE - 11111110
-   0xF6,  // 9   -- ADD VALUE - 11110110
-   0x02   // 10  -- 00000010 // display line when timer done
+   0xFC,  // 0   -- 11111100
+   0x60,  // 1   -- 01100000
+   0xDA,  // 2   -- 11011010
+   0xF2,  // 3   -- 11110010
+   0x66,  // 4   -- 01100110
+   0xB6,  // 5   -- 10110110
+   0xBE,  // 6   -- 10111110
+   0xE0,  // 7   -- 11100000
+   0xFE,  // 8   -- 11111110
+   0xF6,  // 9   -- 11110110
+   0x02   // 10  -- 00000010 // display line when timer done ("----")
 };
 
 
 /******************************************************************************
- *
+ * Initialize the 4-digit 7-segment dispay
  *****************************************************************************/
 void display_init(void)
 {
@@ -134,11 +134,10 @@ void display_eye_right(bool on)
  *****************************************************************************/
 void display_digit(uint8_t location, uint8_t number)
 {
-    // ADD CODE - fix the segments thing
+    // the hex value of the number to be displayed
     uint8_t seg_Vals = SEVEN_SEG_LUT[number];
 
     // turn on the required segments
-    //SEG_DP_PORT->OUT |= SEG_DP_PIN;
     if ((SEG_A_PIN & seg_Vals) != 0) {
         SEG_A_PORT->OUT |= SEG_A_PIN;
     } else {

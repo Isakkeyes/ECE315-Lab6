@@ -11,9 +11,6 @@
 #include "stdint.h"
 #include "stdbool.h"
 
-//delete later
-#include <stdio.h>
-
 #include "msp.h"
 #include "cap_sense.h"
 #include "display.h"
@@ -24,5 +21,6 @@
 void kitchen_timer_mode_count_down(void);
 void kitchen_timer_mode_init(void);
 void display_4_digit(uint8_t time_min, uint8_t time_hour, bool done);
+void toggle_eyes_buzzer(void);
 
 #endif /* KITCHEN_TIMER_H_ */
