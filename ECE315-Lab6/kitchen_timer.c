@@ -78,12 +78,9 @@ void kitchen_timer_mode_init(void)
         if (ALERT_BUTTON_PRESSED) {
 
             if ((capStatus & 0x03) == 0x03) {
-                kitchen_timer_mode_count_down();
                 ALERT_BUTTON_PRESSED = false;
-            }
-
-            // increment/decrement minutes/hours accordingly
-            if (((capStatus & 0x08) == 0x08) && hours_sel) {
+                kitchen_timer_mode_count_down();
+            } else if (((capStatus & 0x08) == 0x08) && hours_sel) {
                 if (set_time_hour == 99) {
                     set_time_hour = 0;
                 } else {
@@ -119,7 +116,7 @@ void kitchen_timer_mode_init(void)
 
         if (ALERT_2_MILLISECOND) {
             if (display_status) {
-                display_4_digit(set_time_hour, set_time_min);
+                display_4_digit(set_time_hour, set_time_min, false);
             } else {
                 display_all_dig_off();
             }
@@ -144,20 +141,24 @@ void kitchen_timer_mode_count_down(void)
     // if H+M put back into initialization mode
 
     while (1) {
-        capStatus = AT42QT2120_read_key_status_lo();
+        capStatus = cap_sense_get_buttons();
 
         if ( (ALERT_BUTTON_PRESSED && ((capStatus & 0x03) == 0x03)) ) {
-            kitchen_timer_mode_init();
             ALERT_BUTTON_PRESSED = false;
+            kitchen_timer_mode_init();
         }
 
         if (time_sec == 0) {
             toggle_eyes_buzzer();
         }
         if (ALERT_2_MILLISECOND) {
-            uint8_t currHour = (time_sec - (time_sec % 3600)) / 3600;
-            uint8_t currMin = ((time_sec % 3600) - (time_sec % 60)) / 60;
-            display_4_digit(currHour, currMin);
+            if (time_sec < 60) {
+                display_4_digit(0, time_sec, false);
+            } else {
+                uint8_t currHour = (time_sec - (time_sec % 3600)) / 3600;
+                uint8_t currMin = ((time_sec % 3600) - (time_sec % 60)) / 60;
+                display_4_digit(currHour, currMin, false);
+            }
             ALERT_2_MILLISECOND = false;
         }
         if (ALERT_1_SECOND) {
@@ -170,18 +171,28 @@ void kitchen_timer_mode_count_down(void)
 /*****************************************************
  * Prints 4-digit number of time in seconds to display
  *****************************************************/
-void display_4_digit(uint8_t time_hour, uint8_t time_min) {
+void display_4_digit(uint8_t time_hour, uint8_t time_min, bool done) {
     printf("In Display Digit \x0A");
 
-    uint8_t time_hour_0 = time_hour % 10;
-    uint8_t time_hour_1 = time_hour / 10;
+    uint8_t time_hour_0 = 0;
+    uint8_t time_hour_1 = 0;
 
     uint8_t time_min_0 = 0;
     uint8_t time_min_1 = 0;
 
-    if ((time_min % 60) != 0) {
-        time_min_0 = time_min % 10;
-        time_min_1 = time_min / 10;
+    if (!done) {
+        time_hour_0 = time_hour % 10;
+        time_hour_1 = time_hour / 10;
+
+        if ((time_min % 60) != 0) {
+            time_min_0 = time_min % 10;
+            time_min_1 = time_min / 10;
+        }
+    } else {
+        time_hour_0 = 10;
+        time_hour_1 = 10;
+        time_min_0 = 10;
+        time_min_1 = 10;
     }
 
     uint8_t capStatus = 0;
@@ -236,11 +247,12 @@ void toggle_eyes_buzzer(void) {
     while (1) {
         
         // check if H+M is pressed and go to initialization if so
-        capStatus = AT42QT2120_read_key_status_lo();
-        if ((capStatus & 0x03) == 0x03) {
+        capStatus = cap_sense_get_buttons();
+        if (ALERT_BUTTON_PRESSED && ((capStatus & 0x03) == 0x03)) {
             display_eye_left(false);
             display_eye_right(false);
             buzzer_off();
+            ALERT_BUTTON_PRESSED = false;
             break;
         }
 
@@ -258,6 +270,11 @@ void toggle_eyes_buzzer(void) {
             buzzer_state = !buzzer_state;
             
             ALERT_1_SECOND = false;
+        }
+
+        if (ALERT_2_MILLISECOND) {
+            display_4_digit(1, 1, true);
+            ALERT_2_MILLISECOND = false;
         }
     }
 

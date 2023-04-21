@@ -20,6 +20,7 @@ uint8_t SEVEN_SEG_LUT[] =
    0xE0,  // 7   -- ADD VALUE - 11100000
    0xFE,  // 8   -- ADD VALUE - 11111110
    0xF6,  // 9   -- ADD VALUE - 11110110
+   0x02   // 10  -- 00000010 // display line when timer done
 };
 
 
@@ -137,7 +138,7 @@ void display_digit(uint8_t location, uint8_t number)
     uint8_t seg_Vals = SEVEN_SEG_LUT[number];
 
     // turn on the required segments
-    SEG_DP_PORT->OUT |= SEG_DP_PIN;
+    //SEG_DP_PORT->OUT |= SEG_DP_PIN;
     if ((SEG_A_PIN & seg_Vals) != 0) {
         SEG_A_PORT->OUT |= SEG_A_PIN;
     } else {
