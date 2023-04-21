@@ -60,7 +60,8 @@ void kitchen_timer_mode_init(void)
     // if H+M start countdown
 
     bool hours_sel = false;
-    uint8_t capStatus = 0;
+    uint8_t capStatus = 0; // stores the values input by the buttons
+    bool display_state = true;
 
     while (1) {
 
@@ -109,8 +110,18 @@ void kitchen_timer_mode_init(void)
             ALERT_BUTTON_PRESSED = false;
         }
 
+        // every 1 second, toggle the state of the display between on/off
+        if (ALERT_1_SECOND) {
+            display_status = !display_status;
+            ALERT_1_SECOND = false;
+        }
+
         if (ALERT_2_MILLISECOND) {
-            display_4_digit(set_time_hour, set_time_min);
+            if (display_status) {
+                display_4_digit(set_time_hour, set_time_min);
+            } else {
+                display_all_dig_off();
+            }
             ALERT_2_MILLISECOND = false;
         }
     }
@@ -134,14 +145,14 @@ void kitchen_timer_mode_count_down(void)
     while (1) {
         capStatus = AT42QT2120_read_key_status_lo();
 
-        if ((capStatus & 0x03) == 0x03) {
-            //kitchen_timer_mode_init();
+        if (((capStatus & 0x03) == 0x03) || (time_sec == 0)) {
+            break;
         }
-        if (time_sec == 0) {
-            // activate buzzer and eye flashing
-        }
+
         if (ALERT_2_MILLISECOND) {
-            display_4_digit(time_sec / 3600, time_sec / 60);
+            uint8_t currHour = (time_sec - (time_sec % 3600)) / 3600;
+            uint8_t currMin = ((time_sec % 3600) - (time_sec % 60)) / 60;
+            display_4_digit(currHour, currMin);
             ALERT_2_MILLISECOND = false;
         }
         if (ALERT_1_SECOND) {
@@ -149,6 +160,12 @@ void kitchen_timer_mode_count_down(void)
             ALERT_1_SECOND = false;
         }
     }
+
+    if (((capStatus & 0x03) == 0x03) || (time_sec == 0)) {
+        kitchen_timer_mode_init();
+        return;
+    }
+    toggle_eyes_buzzer();
 
 }
 
