@@ -31,10 +31,6 @@ void main(void)
 
     __enable_irq();
 
-    //display_digit(1, 9);
-
-    //display_4_digit(00, 21);
-
     kitchen_timer_mode_init();
 
 }
