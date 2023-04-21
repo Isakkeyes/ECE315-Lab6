@@ -61,7 +61,7 @@ void kitchen_timer_mode_init(void)
 
     bool hours_sel = false;
     uint8_t capStatus = 0; // stores the values input by the buttons
-    bool display_state = true;
+    bool display_status = true;
 
     while (1) {
 
@@ -79,6 +79,7 @@ void kitchen_timer_mode_init(void)
 
             if ((capStatus & 0x03) == 0x03) {
                 kitchen_timer_mode_count_down();
+                ALERT_BUTTON_PRESSED = false;
             }
 
             // increment/decrement minutes/hours accordingly
@@ -145,10 +146,14 @@ void kitchen_timer_mode_count_down(void)
     while (1) {
         capStatus = AT42QT2120_read_key_status_lo();
 
-        if (((capStatus & 0x03) == 0x03) || (time_sec == 0)) {
-            break;
+        if ( (ALERT_BUTTON_PRESSED && ((capStatus & 0x03) == 0x03)) ) {
+            kitchen_timer_mode_init();
+            ALERT_BUTTON_PRESSED = false;
         }
 
+        if (time_sec == 0) {
+            toggle_eyes_buzzer();
+        }
         if (ALERT_2_MILLISECOND) {
             uint8_t currHour = (time_sec - (time_sec % 3600)) / 3600;
             uint8_t currMin = ((time_sec % 3600) - (time_sec % 60)) / 60;
@@ -160,13 +165,6 @@ void kitchen_timer_mode_count_down(void)
             ALERT_1_SECOND = false;
         }
     }
-
-    if (((capStatus & 0x03) == 0x03) || (time_sec == 0)) {
-        kitchen_timer_mode_init();
-        return;
-    }
-    toggle_eyes_buzzer();
-
 }
 
 /*****************************************************
