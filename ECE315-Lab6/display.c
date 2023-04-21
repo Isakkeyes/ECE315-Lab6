@@ -9,17 +9,18 @@
 
 uint8_t SEVEN_SEG_LUT[] =
 {
-   0x00,  // 0   -- ADD VALUE
-   0x00,  // 1   -- ADD VALUE
-   0x00,  // 2   -- ADD VALUE
-   0x00,  // 3   -- ADD VALUE
-   0x00,  // 4   -- ADD VALUE
-   0x00,  // 5   -- ADD VALUE
-   0x00,  // 6   -- ADD VALUE
-   0x00,  // 7   -- ADD VALUE
-   0x00,  // 8   -- ADD VALUE
-   0x00,  // 9   -- ADD VALUE
+   0xFC,  // 0   -- ADD VALUE - 11111100
+   0x60,  // 1   -- ADD VALUE - 01100000
+   0xDA,  // 2   -- ADD VALUE - 11011010
+   0xF2,  // 3   -- ADD VALUE - 11110010
+   0x66,  // 4   -- ADD VALUE - 01100110
+   0xB6,  // 5   -- ADD VALUE - 10110110
+   0xBE,  // 6   -- ADD VALUE - 10111110
+   0xE0,  // 7   -- ADD VALUE - 11100000
+   0xFE,  // 8   -- ADD VALUE - 11111110
+   0xF6,  // 9   -- ADD VALUE - 11110110
 };
+
 
 /******************************************************************************
  *
@@ -132,111 +133,44 @@ void display_eye_right(bool on)
 void display_digit(uint8_t location, uint8_t number)
 {
     // ADD CODE - fix the segments thing
+    uint8_t seg_Vals = SEVEN_SEG_LUT[number];
 
     // turn on the required segments
     SEG_DP_PORT->OUT |= SEG_DP_PIN;
-
-    switch(number) {
-        case 0:
-            SEG_A_PORT->OUT |= SEG_A_PIN;
-            SEG_B_PORT->OUT |= SEG_B_PIN;
-            SEG_C_PORT->OUT |= SEG_C_PIN;
-            SEG_D_PORT->OUT |= SEG_D_PIN;
-            SEG_E_PORT->OUT |= SEG_E_PIN;
-            SEG_F_PORT->OUT |= SEG_F_PIN;
-
-            SEG_G_PORT->OUT &= ~SEG_G_PIN;
-            break;
-        case 1:
-            SEG_B_PORT->OUT |= SEG_B_PIN;
-            SEG_C_PORT->OUT |= SEG_C_PIN;
-
-            SEG_A_PORT->OUT &= ~SEG_A_PIN;
-            SEG_D_PORT->OUT &= ~SEG_D_PIN;
-            SEG_E_PORT->OUT &= ~SEG_E_PIN;
-            SEG_F_PORT->OUT &= ~SEG_F_PIN;
-            SEG_G_PORT->OUT &= ~SEG_G_PIN;
-            break;
-        case 2:
-            SEG_A_PORT->OUT |= SEG_A_PIN;
-            SEG_B_PORT->OUT |= SEG_B_PIN;
-            SEG_D_PORT->OUT |= SEG_D_PIN;
-            SEG_E_PORT->OUT |= SEG_E_PIN;
-            SEG_G_PORT->OUT |= SEG_G_PIN;
-
-            SEG_F_PORT->OUT &= ~SEG_F_PIN;
-            SEG_C_PORT->OUT &= ~SEG_C_PIN;
-            break;
-        case 3:
-            SEG_A_PORT->OUT |= SEG_A_PIN;
-            SEG_B_PORT->OUT |= SEG_B_PIN;
-            SEG_C_PORT->OUT |= SEG_C_PIN;
-            SEG_D_PORT->OUT |= SEG_D_PIN;
-            SEG_G_PORT->OUT |= SEG_G_PIN;
-
-            SEG_E_PORT->OUT &= ~SEG_E_PIN;
-            SEG_F_PORT->OUT &= ~SEG_F_PIN;
-            break;
-        case 4:
-            SEG_A_PORT->OUT |= SEG_A_PIN;
-            SEG_B_PORT->OUT |= SEG_B_PIN;
-            SEG_F_PORT->OUT |= SEG_F_PIN;
-            SEG_G_PORT->OUT |= SEG_G_PIN;
-
-            SEG_C_PORT->OUT &= ~SEG_C_PIN;
-            SEG_E_PORT->OUT &= ~SEG_E_PIN;
-            SEG_D_PORT->OUT &= ~SEG_D_PIN;
-            break;
-        case 5:
-            SEG_A_PORT->OUT |= SEG_A_PIN;
-            SEG_C_PORT->OUT |= SEG_C_PIN;
-            SEG_D_PORT->OUT |= SEG_D_PIN;
-            SEG_F_PORT->OUT |= SEG_F_PIN;
-            SEG_G_PORT->OUT |= SEG_G_PIN;
-
-            SEG_E_PORT->OUT &= ~SEG_E_PIN;
-            SEG_B_PORT->OUT &= ~SEG_B_PIN;
-            break;
-        case 6:
-            SEG_A_PORT->OUT |= SEG_A_PIN;
-            SEG_C_PORT->OUT |= SEG_C_PIN;
-            SEG_D_PORT->OUT |= SEG_D_PIN;
-            SEG_E_PORT->OUT |= SEG_E_PIN;
-            SEG_F_PORT->OUT |= SEG_F_PIN;
-            SEG_G_PORT->OUT |= SEG_G_PIN;
-
-            SEG_B_PORT->OUT &= ~SEG_B_PIN;
-            break;
-        case 7:
-            SEG_A_PORT->OUT |= SEG_A_PIN;
-            SEG_B_PORT->OUT |= SEG_B_PIN;
-            SEG_C_PORT->OUT |= SEG_C_PIN;
-
-            SEG_E_PORT->OUT &= ~SEG_E_PIN;
-            SEG_D_PORT->OUT &= ~SEG_D_PIN;
-            SEG_F_PORT->OUT &= ~SEG_F_PIN;
-            SEG_G_PORT->OUT &= ~SEG_G_PIN;
-            break;
-        case 8:
-            SEG_A_PORT->OUT |= SEG_A_PIN;
-            SEG_B_PORT->OUT |= SEG_B_PIN;
-            SEG_C_PORT->OUT |= SEG_C_PIN;
-            SEG_D_PORT->OUT |= SEG_D_PIN;
-            SEG_E_PORT->OUT |= SEG_E_PIN;
-            SEG_F_PORT->OUT |= SEG_F_PIN;
-            SEG_G_PORT->OUT |= SEG_G_PIN;
-            break;
-        case 9:
-            SEG_A_PORT->OUT |= SEG_A_PIN;
-            SEG_B_PORT->OUT |= SEG_B_PIN;
-            SEG_C_PORT->OUT |= SEG_C_PIN;
-            SEG_D_PORT->OUT |= SEG_D_PIN;
-            SEG_F_PORT->OUT |= SEG_F_PIN;
-            SEG_G_PORT->OUT |= SEG_G_PIN;
-
-            SEG_E_PORT->OUT &= ~SEG_E_PIN;
-            break;
-
+    if ((SEG_A_PIN & seg_Vals) != 0) {
+        SEG_A_PORT->OUT |= SEG_A_PIN;
+    } else {
+        SEG_A_PORT->OUT &= ~SEG_A_PIN;
+    }
+    if ((SEG_B_PIN & seg_Vals) != 0) {
+        SEG_B_PORT->OUT |= SEG_B_PIN;
+    } else {
+        SEG_B_PORT->OUT &= ~SEG_B_PIN;
+    }
+    if ((SEG_C_PIN & seg_Vals) != 0) {
+        SEG_C_PORT->OUT |= SEG_C_PIN;
+    } else {
+        SEG_C_PORT->OUT &= ~SEG_C_PIN;
+    }
+    if ((SEG_D_PIN & seg_Vals) != 0) {
+        SEG_D_PORT->OUT |= SEG_D_PIN;
+    } else {
+        SEG_D_PORT->OUT &= ~SEG_D_PIN;
+    }
+    if ((SEG_E_PIN & seg_Vals) != 0) {
+        SEG_E_PORT->OUT |= SEG_E_PIN;
+    } else {
+        SEG_E_PORT->OUT &= ~SEG_E_PIN;
+    }
+    if ((SEG_F_PIN & seg_Vals) != 0) {
+        SEG_F_PORT->OUT |= SEG_F_PIN;
+    } else {
+        SEG_F_PORT->OUT &= ~SEG_F_PIN;
+    }
+    if ((SEG_G_PIN & seg_Vals) != 0) {
+        SEG_G_PORT->OUT |= SEG_G_PIN;
+    } else {
+        SEG_G_PORT->OUT &= ~SEG_G_PIN;
     }
 
     // enable the requested digit
@@ -268,6 +202,7 @@ void display_digit(uint8_t location, uint8_t number)
     }
 
 }
+
 
 
 
